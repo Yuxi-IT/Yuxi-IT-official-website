@@ -1,9 +1,17 @@
-import { useState, useEffect } from "react";
-import { title } from "@/components/primitives";
+import { useState, useEffect, SetStateAction } from "react";
 import DefaultLayout from "@/layouts/default";
 import { Button } from "@heroui/button";
 import { Avatar } from "@heroui/avatar";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Input } from "@heroui/input";
+import { Kbd } from "@heroui/kbd";
+import { SearchIcon } from "@/components/icons";
+import {
+  Listbox,
+  ListboxSection,
+  ListboxItem
+} from "@heroui/listbox";
+import { Divider } from "@heroui/divider";
 
 // 定义 BlogCard 类
 class BlogCard {
@@ -35,12 +43,20 @@ function getTimeAgo(dateString: string): string {
     return `${Math.floor(diffInSeconds / 31536000)}年`;
   }
 }
+export const ListboxWrapper = ({children}: {children: React.ReactNode}) => (
+  <div className="w-full max-w-[260px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100">
+    {children}
+  </div>
+);
 
 export default function DocsPage() {
-  // 使用 BlogCard 类作为状态的初始值
   const [blogList, setBlogList] = useState<BlogCard[]>([]);
+  const [isFocused, setIsFocused] = useState(false);
+  const [filteredBlogs, setFilteredBlogs] = useState<BlogCard[]>([]);
+  const [searchValue, setSearchValue] = useState(""); 
 
-  // 获取 /blog.json 数据
+
+  // 获取数据
   useEffect(() => {
     fetch("/blog.json")
       .then((response) => response.json())
@@ -52,10 +68,111 @@ export default function DocsPage() {
       });
   }, []);
 
+  // 监听CTRL(Command) + K
+  useEffect(() => {
+    const handleKeyDown = (event: { ctrlKey: any; metaKey: any; key: string; preventDefault: () => void; }) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "k") {
+        event.preventDefault();
+        const searchInput = document.getElementById("search");
+        if (searchInput) {
+          searchInput.focus();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+
+
+  const handleFocus = (event: { target: { offsetWidth: any; }; }) => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
+    // 处理搜索框输入
+    const handleSearchChange = (value: SetStateAction<string>) => {
+      if(value.length >= 1){
+        setSearchValue(value);
+
+        const filtered = blogList.filter((blog) => {
+          return (
+            blog.id.toLowerCase().includes(value.toString()) || // 匹配 ID
+            blog.title.toLowerCase().includes(value.toString()) || // 匹配标题
+            blog.tags.some((tag) => tag.toLowerCase().includes(value.toString())) // 匹配标签
+          );
+        });
+    
+        setFilteredBlogs(filtered);
+      }
+    };
+
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg text-center justify-center">
+          <div style={{ position: "relative" }}>
+            <Input
+            id="search"
+              aria-label="Search"
+              classNames={{
+                inputWrapper: "bg-default-100",
+                input: "text-sm",
+              }}
+              endContent={
+                <Kbd className="hidden lg:inline-block" keys={["command"]}>
+                  K
+                </Kbd>
+              }
+              labelPlacement="outside"
+              placeholder="搜索文章标题、ID、标签..."
+              variant="bordered"
+              startContent={
+                <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+              }
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              onChange={(event) => handleSearchChange(event.target.value)}
+              type="search"
+            />
+
+            {isFocused && (
+          <Listbox
+              style={{
+                border: "1px solid rgba(100,100,100,0.5)",
+                marginTop: "8px",
+                borderRadius: "15px",
+              }}
+              className="w-full"
+              aria-label="Listbox menu with icons"
+              variant="faded"
+            >
+              {filteredBlogs.length > 0 ? (
+                filteredBlogs.map((blog) => (
+                  <ListboxItem key={blog.id}>
+                    <div>
+                      <p className="font-semibold">{blog.title}</p>
+                      <p className="text-sm text-default-500">
+                        标签: {blog.tags.join(", ")}
+                      </p>
+                    </div>
+                  </ListboxItem>
+                ))
+              ) : (
+                <ListboxItem key="no-results">无匹配结果</ListboxItem>
+              )}
+            </Listbox>
+            )}
+          </div>
+
+          <br/><Divider /><br/>
+
           {blogList.map((blog, index) => (
             <Card key={index} style={{transform: "scale(1)"}} 
               className="w-[300px] md:w-[120vh] h-[225px] md:h-[250px] w-full w-auto max-w-full mb-4">
@@ -93,7 +210,7 @@ export default function DocsPage() {
                     </span>
                   ))}
                   <span aria-label="computer" className="py-2" role="img">
-                    💻
+                    
                   </span>
                 </span>
               </CardBody>

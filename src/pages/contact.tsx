@@ -66,13 +66,7 @@ export default function ContactPage() {
             
             <Card>
               <CardHeader className="flex gap-3">
-                <Image
-                  alt="heroui logo"
-                  height={40}
-                  radius="sm"
-                  src="https://img.icons8.com/material-outlined/96/secure-mail.png"
-                  width={40}
-                />
+
                 <div className="flex flex-col">
                   <p className="text-md">工作邮箱</p>
                   <p className="text-small text-default-500">Sm4Z0n3T@outlook.com</p>
@@ -91,14 +85,7 @@ export default function ContactPage() {
             </Card>
 
             <Card>
-              <CardHeader className="flex gap-3">
-                <Image
-                  alt="heroui logo"
-                  height={40}
-                  radius="sm"
-                  src="https://img.icons8.com/material-outlined/96/send-mass-email.png"
-                  width={40}
-                />
+              <CardHeader className="flex text-center">
                 <div className="flex flex-col">
                   <p className="text-md">业务邮箱</p>
                   <p className="text-small text-default-500">YuxiIT@hotmail.com</p>

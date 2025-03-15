@@ -20,7 +20,11 @@ function getBody(id: string){
   .then(data => {
     var hbody = document.getElementById("hBody");
     if(hbody){
-      hbody.innerHTML = data;
+      if(data.search('class="header"') !== -1){
+        hbody.innerHTML = data;
+      }else{
+        hbody.innerHTML = `<h2 style="font-size:1.7rem;margin-top:100px">文章好像丢失了😰</h2>`;
+      }
     }
   })
   .catch(error => {
@@ -58,7 +62,9 @@ export default function BlogViwer() {
             {id ? `Blog ID: ${id}` : "No ID provided"}
           </h1>
         </div>
-        <div id="hBody"></div>
+        <div id="hBody">
+          
+        </div>
       </section>
     </DefaultLayout>
   );
