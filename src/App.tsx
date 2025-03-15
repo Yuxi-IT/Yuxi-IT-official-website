@@ -7,6 +7,7 @@ import BlogPage from "@/pages/blog";
 import AboutPage from "@/pages/about";
 import SponsorPage from "@/pages/sponsor";
 import ContactPage from "@/pages/contact";
+import BlogViwer from "./pages/viwer";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route element={<AboutPage />} path="/about" />
       <Route element={<SponsorPage />} path="/sponsor" />
       <Route element={<ContactPage />} path="/contact" />
+      <Route element={<BlogViwer />} path="/view" />
     </Routes>
   );
 }

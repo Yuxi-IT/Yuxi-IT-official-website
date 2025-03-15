@@ -2,16 +2,42 @@ import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import {Card, CardBody, CardFooter} from "@heroui/card";
 
-var list = [
+var list: any[] = [
   {
     title: "易供需",
     img: "/images/suppylink.jpeg",
-    url: "/suppylink",
+    url: "",
     deprecate: "连接供需双方，高效匹配资源与需求的交易保障平台",
     process: 0,
+  },{
+    title: "NovaPanel",
+    img: "/images/novapanel.jpeg",
+    url: "https://github.com/Yuxi-IT/NovaPanel",
+    deprecate: "专为 Windows Server 设计的 Web 运维面板",
+    process: 1,
+  },{
+    title: "NovaMAUI",
+    img: "/images/novamaui.jpeg",
+    url: "https://github.com/Yuxi-IT/NovaMAUI",
+    deprecate: "MAUI+Blazor+ShadcnUI构建的跨平台应用程序框架",
+    process: 1,
+  },{
+    title: "NovaRAT 4.0",
+    img: "/images/hotrat.jpeg",
+    url: "https://github.com/Yuxi-IT/HotRAT4.0",
+    deprecate: "一款功能强大的远程控制服务端软件，安全、高效地管理远程设备",
+    process: 1,
+  },{
+    title: "HotRAT-Nextgen",
+    img: "/images/hotrat2.jpeg",
+    url: "https://github.com/SmaZone2020/HotRAT-Nextgen",
+    deprecate: "基于 HotRAT 进行二次开发的一个免费开源的远程控制项目",
+    process: 2,
   }
 ];
 
+
+/*
 fetch('/product.json')
   .then(response => response.json())
   .then(data => {
@@ -27,6 +53,7 @@ fetch('/product.json')
   .catch(error => {
     console.error('Error fetching product data:', error);
   });
+*/
 
 
 export default function ProductPage() {
