@@ -1,4 +1,3 @@
-import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import {Card, CardFooter,CardHeader,CardBody} from "@heroui/card";
 import {Divider} from "@heroui/divider";

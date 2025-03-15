@@ -8,7 +8,6 @@ import { Kbd } from "@heroui/kbd";
 import { SearchIcon } from "@/components/icons";
 import {
   Listbox,
-  ListboxSection,
   ListboxItem
 } from "@heroui/listbox";
 import { Divider } from "@heroui/divider";
@@ -53,7 +52,6 @@ export default function DocsPage() {
   const [blogList, setBlogList] = useState<BlogCard[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const [filteredBlogs, setFilteredBlogs] = useState<BlogCard[]>([]);
-  const [searchValue, setSearchValue] = useState(""); 
 
 
   // 获取数据
@@ -88,7 +86,7 @@ export default function DocsPage() {
 
 
 
-  const handleFocus = (event: { target: { offsetWidth: any; }; }) => {
+  const handleFocus = () => {
     setIsFocused(true);
   };
 
@@ -99,7 +97,6 @@ export default function DocsPage() {
     // 处理搜索框输入
     const handleSearchChange = (value: SetStateAction<string>) => {
       if(value.length >= 1){
-        setSearchValue(value);
 
         const filtered = blogList.filter((blog) => {
           return (

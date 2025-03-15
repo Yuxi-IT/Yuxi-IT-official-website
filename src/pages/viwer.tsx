@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { title } from "@/components/primitives";
-import { siteConfig } from "@/config/site";
 import DefaultLayout from "@/layouts/default";
 import { Button } from "@heroui/button";
 
