@@ -81,10 +81,6 @@ export const Navbar = () => {
         backdrop="opaque"
         classNames={{
           body: "py-6",
-          backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-          base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
-          header: "border-b-[1px] border-[#292f46]",
-          footer: "border-t-[1px] border-[#292f46]",
           closeButton: "hover:bg-white/5 active:bg-white/10",
         }}
         isOpen={isOpen}
@@ -108,7 +104,7 @@ export const Navbar = () => {
                 </p>
               </ModalBody>
               <ModalFooter>
-                <Button className="bg-[#6f4ef2] shadow-lg shadow-indigo-500/20" onPress={onClose}>
+                <Button className="bg-[#000] shadow-lg shadow-indigo-500/20" style={{color: "#fff"}} onPress={onClose}>
                   好的
                 </Button>
               </ModalFooter>
@@ -116,6 +112,7 @@ export const Navbar = () => {
           )}
         </ModalContent>
       </Modal>
+
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
         <Link isExternal href={siteConfig.links.github}>
           <GithubIcon className="text-default-500" />

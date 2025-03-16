@@ -11,6 +11,8 @@ import {
   ListboxItem
 } from "@heroui/listbox";
 import { Divider } from "@heroui/divider";
+import { useNavigate } from 'react-router-dom';
+import { Link } from "@heroui/link";
 
 // 定义 BlogCard 类
 class BlogCard {
@@ -52,7 +54,8 @@ export default function DocsPage() {
   const [blogList, setBlogList] = useState<BlogCard[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const [filteredBlogs, setFilteredBlogs] = useState<BlogCard[]>([]);
-
+  const [searchValue, setSearchValue] = useState('');
+  const navigate = useNavigate();
 
   // 获取数据
   useEffect(() => {
@@ -85,24 +88,27 @@ export default function DocsPage() {
   }, []);
 
 
-
+// 获取焦点
   const handleFocus = () => {
     setIsFocused(true);
   };
 
+// 失去焦点
   const handleBlur = () => {
-    setIsFocused(false);
+    if (!searchValue) {
+      setIsFocused(false);
+    }
   };
-
-    // 处理搜索框输入
+// 搜索框内容修改
     const handleSearchChange = (value: SetStateAction<string>) => {
+      setSearchValue(value);
       if(value.length >= 1){
 
         const filtered = blogList.filter((blog) => {
           return (
-            blog.id.toLowerCase().includes(value.toString()) || // 匹配 ID
-            blog.title.toLowerCase().includes(value.toString()) || // 匹配标题
-            blog.tags.some((tag) => tag.toLowerCase().includes(value.toString())) // 匹配标签
+            blog.id.toLowerCase().includes(value.toString()) ||
+            blog.title.toLowerCase().includes(value.toString()) ||
+            blog.tags.some((tag) => tag.toLowerCase().includes(value.toString())) 
           );
         });
     
@@ -135,7 +141,7 @@ export default function DocsPage() {
               }
               onFocus={handleFocus}
               onBlur={handleBlur}
-              onChange={(event) => handleSearchChange(event.target.value)}
+              onChange={(event) => {handleSearchChange(event.target.value);handleFocus()}}
               type="search"
             />
 
@@ -153,12 +159,12 @@ export default function DocsPage() {
               {filteredBlogs.length > 0 ? (
                 filteredBlogs.map((blog) => (
                   <ListboxItem key={blog.id}>
-                    <div>
+                    <a onClick={()=>{navigate("/view?id=" + blog.id)}}>
                       <p className="font-semibold">{blog.title}</p>
                       <p className="text-sm text-default-500">
                         标签: {blog.tags.join(", ")}
                       </p>
-                    </div>
+                    </a>
                   </ListboxItem>
                 ))
               ) : (
@@ -190,9 +196,7 @@ export default function DocsPage() {
                   color="primary"
                   radius="full"
                   size="sm"
-                  onClick={()=>{
-                    document.location = ("/view?id=" + blog.id)
-                  }}
+                  onClick={() => navigate("/view?id=" + blog.id)}
                 >
                   查看
                 </Button>
@@ -200,15 +204,12 @@ export default function DocsPage() {
               <CardBody className="px-3 py-0 text-default-400">
                 <p>{blog.content}</p>
                 <span className="pt-2">
-                  {blog.tags.map((tag, i) => (
-                    <span key={i}>
+                {blog.tags.map((tag, i) => (
+                    <Link href="#" onClick={(e) => {e.preventDefault();}} key={i}>
                       #{tag}
-                      {i < blog.tags.length - 1 && " "}
-                    </span>
+                      &nbsp;
+                    </Link>
                   ))}
-                  <span aria-label="computer" className="py-2" role="img">
-                    
-                  </span>
                 </span>
               </CardBody>
               <CardFooter className="gap-3">
@@ -218,11 +219,10 @@ export default function DocsPage() {
                     {blog.date}
                   </p>
                 </div>
-                <div className="flex gap-1">
+                <div className="flex justify-end gap-1">
                   <p className="font-semibold text-default-400 text-small">
-                    {getTimeAgo(blog.date)}
+                    {getTimeAgo(blog.date)}前
                   </p>
-                  <p className="text-default-400 font-semibold text-small">前</p>
                 </div>
               </CardFooter>
             </Card>

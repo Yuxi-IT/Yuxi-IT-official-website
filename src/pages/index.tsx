@@ -7,10 +7,13 @@ import { siteConfig } from "@/config/site";
 import { GithubIcon } from "@/components/icons";
 import DefaultLayout from "@/layouts/default";
 import Typewriter from 'typewriter-effect';
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function IndexPage() {
+  const navigate = useNavigate();
+  
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -38,7 +41,7 @@ export default function IndexPage() {
               radius: "full",
               variant: "shadow",
             })}
-            href={siteConfig.links.product}
+            onClick={()=>{navigate(siteConfig.links.product)}}
           >
             产品
           </Link>
